@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 
 import config
 from utils import endl, escape, unescape, show_tg, read_message_norm, write_message_norm, reset_message
@@ -10,9 +10,7 @@ import threading
 
 import logging
 import coloredlogs
-# logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
-#                     level=logging.INFO)
-coloredlogs.install(level=logging.INFO)
+coloredlogs.install(level=logging.DEBUG if config.DEBUG else logging.INFO)
 
 
 to_tg = True
@@ -34,7 +32,7 @@ def send(type_: str, msg: str) -> None:
     msg = unescape(msg)
     if to_tg:
         if type_ == "plain":
-            bot.send_message(chat_id=config.TG_GROUP, text="[From QQ]" + msg)
+            bot.send_message(chat_id=config.TG_GROUP, text=msg)
         elif type_ == "image":
             bot.send_photo(chat_id=config.TG_GROUP,
                            photo=open(f"qq_image/{msg}", "rb"))

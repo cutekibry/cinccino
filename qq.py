@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 
 import config
 from utils import endl, escape, unescape, show_qq, read_message, write_message, reset_message
@@ -28,10 +28,10 @@ app = GraiaMiraiApplication(
         account=config.QQ_ACCOUNT,  # 你的机器人的 qq 号
         websocket=True  # Graia 已经可以根据所配置的消息接收的方式来保证消息接收部分的正常运作.
     ),
-    debug=False
+    debug=config.DEBUG
 )
 
-coloredlogs.install(level='INFO')
+coloredlogs.install(level='DEBUG' if config.DEBUG else 'INFO')
 
 to_qq = True
 
@@ -45,10 +45,12 @@ if qq_group is None:
 
 
 async def send(type_: str, msg: str):
+    global qq_group
     msg = unescape(msg)
+    app.logger.debug(f"send {type_} {msg}")
     if to_qq:
         if type_ == "plain":
-            await app.sendGroupMessage(config.QQ_GROUP, MessageChain.create([Plain("[From Telegram]" + msg)]))
+            await app.sendGroupMessage(config.QQ_GROUP, MessageChain.create([Plain(msg)]))
         elif type_ == "image":
             await app.sendGroupMessage(config.QQ_GROUP, MessageChain.create([Image.fromLocalFile(f"tg_image/{msg}")]))
 
