@@ -1,8 +1,11 @@
-# 机器人名称
+# 机器人显示名称，可以随意更改
 BOT_NAME = "bot"
 
 
-# mirai-api-http 使用的 AuthKey，请保证与 config/mirai-api-http.yml 相同
+# `mirai-api-http` 使用的 `authKey`，是一个仅由字母或数字组成的字符串
+# 对于不了解 `authKey` 的用户：简单来说，`AuthKey` 就是沟通其他程序与 `mirai-api-http` 的密钥
+# 安全起见，请务必更改该变量
+# 如果你还是不能明白，把它更改为随便某个随机串就行了
 QQ_AUTHKEY = "INITKEYoshawott"
 # QQ 号
 QQ_ACCOUNT = 2054986856
@@ -32,7 +35,7 @@ BREAK_TIME = 1
 # 当读取文件上锁时的休息时间、重试最大次数，以及超过最大次数时是否要强行删除锁
 # 运行程序退出时可能没有删除锁，导致锁一直存在
 RETRY_TIME = 0.1
-RESET_RETRY_TIMES = 20
+RESET_RETRY_TIMES = 50
 RESET_FORCE_REMOVE = True
 
 
