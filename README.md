@@ -1,1 +1,1 @@
-# cinccino-mirai
+# cinccino

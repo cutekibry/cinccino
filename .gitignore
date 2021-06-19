@@ -1,0 +1,9 @@
+__pycache__
+bot/qq_image
+bot/qq_lock
+bot/qq_message
+bot/tg_image
+bot/tg_lock
+bot/tg_message
+bot/config.py
+config/mirai-api-http.yml

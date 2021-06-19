@@ -1,0 +1,6 @@
+python-telegram-bot
+graia-application-mirai
+aiofiles
+pydantic==1.7.1
+coloredlogs
+pysocks
