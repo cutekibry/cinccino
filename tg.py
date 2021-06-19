@@ -143,12 +143,12 @@ def work_tg_off(update: Update, context: CallbackContext) -> None:
 reset_message("tg")
 reset_message("qq")
 
-bot.send_message(chat_id=config.TG_GROUP, text=f"{config.BOT} 已启动。")
+bot.send_message(chat_id=config.TG_GROUP, text=f"{config.BOT_NAME} 已启动。")
 
-updater.dispatcher.add_handler(CommandHandler("to_qq_on", work_qq_on))
-updater.dispatcher.add_handler(CommandHandler("to_qq_off", work_qq_off))
-updater.dispatcher.add_handler(CommandHandler("to_tg_on", work_tg_on))
-updater.dispatcher.add_handler(CommandHandler("to_tg_off", work_tg_off))
+updater.dispatcher.add_handler(CommandHandler("to_qq_on", work_qq_on, filters=filterOver))
+updater.dispatcher.add_handler(CommandHandler("to_qq_off", work_qq_off, filters=filterOver))
+updater.dispatcher.add_handler(CommandHandler("to_tg_on", work_tg_on, filters=filterOver))
+updater.dispatcher.add_handler(CommandHandler("to_tg_off", work_tg_off, filters=filterOver))
 updater.dispatcher.add_handler(MessageHandler(Filters.photo & filterOver, work_photo))
 updater.dispatcher.add_handler(MessageHandler(Filters.all & filterOver, work_text))
 
