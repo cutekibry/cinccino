@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 
 import config
 from utils import endl, escape, unescape, show_qq, read_message, write_message, reset_message

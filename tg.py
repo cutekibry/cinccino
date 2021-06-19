@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/python3
 
 import config
 from utils import endl, escape, unescape, show_tg, read_message_norm, write_message_norm, reset_message
