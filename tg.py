@@ -1,21 +1,25 @@
 #!/usr/bin/python3
 
+from telegram.ext import MessageFilter
 import config
 from utils import endl, escape, unescape, show_tg, read_message_norm, write_message_norm, reset_message
 
-from telegram import Bot, utils, Update
+from telegram import Bot, utils, Update, Message
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackContext
 
-import threading
+from datetime import datetime, timezone
 
 import logging
 import coloredlogs
-coloredlogs.install(level=logging.DEBUG if config.DEBUG else logging.INFO)
+# logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+#                     level=logging.INFO)
+coloredlogs.install(level=logging.INFO)
 
 
 to_tg = True
 message_cache = ""
 image_cnt = 0
+start_time = datetime.now(timezone.utc)
 
 
 if config.PROXY_URL:
@@ -28,11 +32,17 @@ else:
     updater = Updater(token=config.TG_TOKEN, use_context=True)
 
 
+class FilterOvertime(MessageFilter):
+    def filter(self, message: Message):
+        return message.date >= start_time
+filterOver = FilterOvertime()
+
+
 def send(type_: str, msg: str) -> None:
     msg = unescape(msg)
     if to_tg:
         if type_ == "plain":
-            bot.send_message(chat_id=config.TG_GROUP, text=msg)
+            bot.send_message(chat_id=config.TG_GROUP, text="[From QQ]" + msg)
         elif type_ == "image":
             bot.send_photo(chat_id=config.TG_GROUP,
                            photo=open(f"qq_image/{msg}", "rb"))
@@ -137,8 +147,8 @@ updater.dispatcher.add_handler(CommandHandler("to_qq_on", work_qq_on))
 updater.dispatcher.add_handler(CommandHandler("to_qq_off", work_qq_off))
 updater.dispatcher.add_handler(CommandHandler("to_tg_on", work_tg_on))
 updater.dispatcher.add_handler(CommandHandler("to_tg_off", work_tg_off))
-updater.dispatcher.add_handler(MessageHandler(Filters.photo, work_photo))
-updater.dispatcher.add_handler(MessageHandler(Filters.all, work_text))
+updater.dispatcher.add_handler(MessageHandler(Filters.photo & filterOver, work_photo))
+updater.dispatcher.add_handler(MessageHandler(Filters.all & filterOver, work_text))
 
 updater.job_queue.run_repeating(forward_from_qq, interval=config.BREAK_TIME)
 updater.job_queue.run_repeating(forward_to_qq, interval=config.BREAK_TIME)
