@@ -114,14 +114,6 @@ async def work_msg(member, message: MessageChain):
         message_cache += f"image {cur}{endl}"
 
 
-@bcc.receiver("FriendMessage")
-async def friend_message_listener(app: GraiaMiraiApplication, friend: Friend):
-    await app.sendFriendMessage(friend, MessageChain.create([
-        Plain("Hello, World!")
-    ]))
-    if friend.id == 2054986856:
-        await app.sendGroupMessage(config.QQ_GROUP, MessageChain.create([Plain("test")]))
-
 
 @bcc.receiver("GroupMessage")
 async def group_message_handler(
