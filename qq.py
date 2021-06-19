@@ -5,14 +5,14 @@ from utils import endl, escape, unescape, show_qq, read_message, write_message, 
 
 from pathlib import Path
 import coloredlogs
+import asyncio
+import aiofiles
 
 from graia.broadcast import Broadcast
 from graia.application import GraiaMiraiApplication, Session
 from graia.application.message.chain import MessageChain
 from graia.application.event.lifecycle import ApplicationLaunched
-import asyncio
-import aiofiles
-
+from graia.application.context import enter_context
 from graia.application.message.elements.internal import Plain, Image, Quote
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
@@ -44,15 +44,20 @@ if qq_group is None:
         f"The QQ Group (id = {config.QQ_GROUP}) can't be gathered.")
 
 
+MsgPlain = lambda x: MessageChain.create([Plain(x)])
+MsgImageLocal = lambda x: MessageChain.create([Image.fromLocalFile(x)])
+
+
 async def send(type_: str, msg: str):
-    global qq_group
     msg = unescape(msg)
     app.logger.debug(f"send {type_} {msg}")
     if to_qq:
         if type_ == "plain":
-            await app.sendGroupMessage(config.QQ_GROUP, MessageChain.create([Plain(msg)]))
+            await app.sendGroupMessage(config.QQ_GROUP, MsgPlain(msg))
         elif type_ == "image":
-            await app.sendGroupMessage(config.QQ_GROUP, MessageChain.create([Image.fromLocalFile(f"tg_image/{msg}")]))
+            await app.sendGroupMessage(config.QQ_GROUP, MsgImageLocal(f"tg_image/{msg}"))
+
+
 
 
 async def forward_from_tg():
@@ -134,13 +139,11 @@ async def group_message_handler(
         message_cache += f"qq True{endl}"
 
         await send("plain", config.PAT_QQ_ON % member.name)
-        work_msg({"name": config.BOT_NAME}, MessageChain.create(
-            [Plain(config.PAT_QQ_ON % member.name)]))
+        work_msg({"name": config.BOT_NAME}, MsgPlain(config.PAT_QQ_ON % member.name))
 
     elif message.asDisplay().startswith("/to_qq_off"):
         await send("plain", config.PAT_QQ_OFF % member.name)
-        work_msg({"name": config.BOT_NAME}, MessageChain.create(
-            [Plain(config.PAT_QQ_OFF % member.name)]))
+        work_msg({"name": config.BOT_NAME}, MsgPlain(config.PAT_QQ_OFF % member.name))
 
         to_qq = False
         message_cache += f"qq False{endl}"
@@ -149,13 +152,11 @@ async def group_message_handler(
         message_cache += f"tg True{endl}"
 
         await send("plain", config.PAT_TG_ON % member.name)
-        work_msg({"name": config.BOT_NAME}, MessageChain.create(
-            [Plain(config.PAT_TG_ON % member.name)]))
+        work_msg({"name": config.BOT_NAME}, MsgPlain(config.PAT_TG_ON % member.name))
 
     elif message.asDisplay().startswith("/to_tg_off"):
         await send("plain", config.PAT_TG_OFF % member.name)
-        work_msg({"name": config.BOT_NAME}, MessageChain.create(
-            [Plain(config.PAT_TG_OFF % member.name)]))
+        work_msg({"name": config.BOT_NAME}, MsgPlain(config.PAT_TG_OFF % member.name))
 
         message_cache += f"tg False{endl}"
 
