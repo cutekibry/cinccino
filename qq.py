@@ -164,7 +164,6 @@ async def group_message_handler(
 
 @bcc.receiver(ApplicationLaunched)
 async def init():
-    await app.sendGroupMessage(config.QQ_GROUP, MessageChain.create([Plain(f"{config.BOT} 已启动。")]))
     asyncio.create_task(forward_to_tg())
     asyncio.create_task(forward_from_tg())
 
