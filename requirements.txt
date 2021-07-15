@@ -4,3 +4,5 @@ aiofiles
 pydantic==1.7.1
 coloredlogs
 pysocks
+python-magic
+pillow

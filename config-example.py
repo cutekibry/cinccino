@@ -44,7 +44,9 @@ RESET_FORCE_REMOVE = True
 
 
 # 一些模式串，更改了也没什么用
-PAT_QQ_ON = f"message {BOT_NAME}: Telegram 至 QQ 的转发被 %s 开启了。"
-PAT_QQ_OFF = f"message {BOT_NAME}: Telegram 至 QQ 的转发被 %s 关闭了。"
-PAT_TG_ON = f"message {BOT_NAME}: QQ 至 Telegram 的转发被 %s 开启了。"
-PAT_TG_OFF = f"message {BOT_NAME}: QQ 至 Telegram 的转发被 %s 关闭了。"
+PAT_QQ_START = f"QQ 侧转发机器人已开启。"
+PAT_TG_START = f"Telegram 侧转发机器人已开启。"
+PAT_QQ_ON = f"Telegram 至 QQ 的转发被 %s 开启了。"
+PAT_QQ_OFF = f"Telegram 至 QQ 的转发被 %s 关闭了。"
+PAT_TG_ON = f"QQ 至 Telegram 的转发被 %s 开启了。"
+PAT_TG_OFF = f"QQ 至 Telegram 的转发被 %s 关闭了。"

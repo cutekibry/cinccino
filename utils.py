@@ -1,5 +1,6 @@
 #!/bin/python3
 
+import magic
 import config
 import asyncio
 import aiofiles
@@ -14,6 +15,14 @@ from pathlib import Path
 endl = "\n"
 
 
+mime_tester = magic.open(magic.MAGIC_MIME)
+mime_tester.load()
+
+
+def get_mimetype(path: str):
+    return mime_tester.file(path)
+
+
 def escape(string: str):
     return "" if string is None else string.replace("\n", "\\n")
 
@@ -22,12 +31,12 @@ def unescape(string: str):
     return "" if string is None else string.replace("\\n", "\n")
 
 
-def show_qq(member:Member):
+def show_qq(member: Member):
     return escape(f"{member.name}({member.id})")
 
 
-def show_tg(user:User):
-    return escape(f"{user.name}")
+def show_tg(user: User):
+    return escape(f"{user.first_name}{' ' + user.last_name if user.last_name else ''}{' (@' + user.username + ')' if user.username else ''}")
 
 
 def reset_message(name: str):
@@ -36,7 +45,8 @@ def reset_message(name: str):
         cnt += 1
         if cnt >= config.RESET_RETRY_TIMES:
             if config.RESET_FORCE_REMOVE:
-                print(f"{name}_lock still exists after {config.RESET_RETRY_TIMES} attempt(s)")
+                print(
+                    f"{name}_lock still exists after {config.RESET_RETRY_TIMES} attempt(s)")
                 print("force remove.")
                 Path(f"{name}_lock").unlink()
                 break
@@ -48,9 +58,9 @@ def reset_message(name: str):
     Path(f"{name}_lock").touch()
     if Path(f"{name}_message").exists():
         Path(f"{name}_message").unlink()
-    if Path(f"{name}_image").exists():
-        shutil.rmtree(f"{name}_image")
-    Path(f"{name}_image").mkdir()
+    if Path(f"{name}_file").exists():
+        shutil.rmtree(f"{name}_file")
+    Path(f"{name}_file").mkdir()
     Path(f"{name}_message").touch()
     Path(f"{name}_lock").unlink()
 
@@ -99,4 +109,3 @@ def read_message_norm(name: str):
     Path(f"{name}_message").touch()
     Path(f"{name}_lock").unlink()
     return result
-

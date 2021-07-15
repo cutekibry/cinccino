@@ -1,8 +1,8 @@
 __pycache__
-qq_image
+qq_file
 qq_lock
 qq_message
-tg_image
+tg_file
 tg_lock
 tg_message
 config.py
